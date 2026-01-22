@@ -1,6 +1,9 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from "cors";
+import movieRoutes from './routes/movie.routes.js'
+
+
 const app = express();
 dotenv.config()
 
@@ -11,8 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.get("/",(req , res) =>{
-    res.send("Well and good");
-})
+app.use("/api/movies", movieRoutes);
 
 export default app;
