@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import AddMovie from "./pages/Admin/AddMovie";
 import EditMovie from "./pages/Admin/EditMovie";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
   return (
@@ -13,7 +14,11 @@ function App() {
         <Route path="/search" element={<Search />} />
 
         {/* Admin */}
-        <Route path="/admin/add" element={<AddMovie />} />
+        <Route path="/admin/add" element={
+            <ProtectedRoute adminOnly={true}>
+              <AddMovie />
+            </ProtectedRoute>
+          } />
         <Route path="/admin/edit/:id" element={<EditMovie />} />
       </Routes>
     </Router>
