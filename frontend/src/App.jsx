@@ -5,6 +5,7 @@ import Search from "./pages/Search";
 import AddMovie from "./pages/Admin/AddMovie";
 import EditMovie from "./pages/Admin/EditMovie";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
-
+        <Route path="/login" element={<Login />} />
         {/* Admin */}
         <Route path="/admin/add" element={
             <ProtectedRoute adminOnly={true}>
