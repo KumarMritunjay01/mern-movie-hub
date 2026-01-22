@@ -1,20 +1,25 @@
 import express from "express";
-import {
-  addMovie,
-  getAllMovies,
-  searchMovies,
-  sortMovies,
-  updateMovie,
-  deleteMovie,
+import { 
+    addMovie,
+    getAllMovies,
+    searchMovies,
+    sortMovies,
+    updateMovie,
+    deleteMovie,
 } from "../controllers/movie.controller.js";
+
+import { protect } from "../middleware/auth.middleware.js";
+import { adminOnly } from "../middleware/role.middleware.js";
 
 const router = express.Router();
 
-router.post("/", addMovie);
-router.get("/", getAllMovies);
+router.post("/", protect, addMovie);
 router.get("/search", searchMovies);
 router.get("/sorted", sortMovies);
-router.put("/:id", updateMovie);
-router.delete("/:id", deleteMovie);
+
+// Admin protected routes
+router.post("/", protect, adminOnly, addMovie);
+router.put("/:id", protect, adminOnly, updateMovie);
+router.delete("/:id", protect, adminOnly, deleteMovie);
 
 export default router;
