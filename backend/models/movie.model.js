@@ -13,6 +13,7 @@ const movieSchema = new mongoose.Schema(
     },
     poster: {
       type: String, // image URL
+      default: "https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-1-1-150x150.jpg", 
     },
     rating: {
       type: Number,
