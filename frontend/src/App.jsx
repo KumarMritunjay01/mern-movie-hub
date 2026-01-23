@@ -7,6 +7,7 @@ import EditMovie from "./pages/Admin/EditMovie";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./pages/Login";
 import Navbar from "./components/common/Navbar";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* Admin */}
         <Route path="/admin/add" element={

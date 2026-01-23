@@ -23,13 +23,11 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash password before save
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
-  this.password = await bcrypt.hash(this.password, 10);
-});
-
-// Compare password
+// 🔐 Compare password
 userSchema.methods.comparePassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
