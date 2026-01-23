@@ -1,27 +1,27 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Button,
+  Tooltip,
+  MenuItem,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const pages = [
-  { name: "Home", path: "/" },
-  { name: "Search", path: "/search" },
+  { name: "Home", path: "/user" },
+  { name: "Search", path: "/user/search" },
 ];
 
-const adminPages = [
-  { name: "Add Movie", path: "/admin/add" },
-];
+const adminPages = [{ name: "Add Movie", path: "/admin/add" }];
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -30,55 +30,48 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
-  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
-  const handleCloseNavMenu = () => setAnchorElNav(null);
-  const handleCloseUserMenu = () => setAnchorElUser(null);
-
   const handleLogout = () => {
     logout();
-    handleCloseUserMenu();
-    navigate("/login");
+    setAnchorElUser(null);
+    navigate("/");
   };
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar>
 
           {/* LOGO */}
           <Typography
             variant="h6"
             component={Link}
-            to="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              color: "inherit",
-              textDecoration: "none",
-              fontWeight: "bold",
-            }}
+            to="/user"
+            sx={{ flexGrow: 1, textDecoration: "none", color: "white" }}
           >
             🎬 MovieApp
           </Typography>
 
-          {/* Mobile Menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton onClick={handleOpenNavMenu} color="inherit">
+          {/* MOBILE MENU */}
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              onClick={(e) => setAnchorElNav(e.currentTarget)}
+              color="inherit"
+            >
               <MenuIcon />
             </IconButton>
 
             <Menu
               anchorEl={anchorElNav}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => setAnchorElNav(null)}
             >
               {pages.map((page) => (
                 <MenuItem
                   key={page.name}
-                  component={Link}
-                  to={page.path}
-                  onClick={handleCloseNavMenu}
+                  onClick={() => {
+                    setAnchorElNav(null);
+                    navigate(page.path);
+                  }}
                 >
                   {page.name}
                 </MenuItem>
@@ -88,9 +81,10 @@ const Navbar = () => {
                 adminPages.map((page) => (
                   <MenuItem
                     key={page.name}
-                    component={Link}
-                    to={page.path}
-                    onClick={handleCloseNavMenu}
+                    onClick={() => {
+                      setAnchorElNav(null);
+                      navigate(page.path);
+                    }}
                   >
                     {page.name}
                   </MenuItem>
@@ -98,13 +92,12 @@ const Navbar = () => {
             </Menu>
           </Box>
 
-          {/* Desktop Menu */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          {/* DESKTOP MENU */}
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page.name}
-                component={Link}
-                to={page.path}
+                onClick={() => navigate(page.path)}
                 sx={{ color: "white" }}
               >
                 {page.name}
@@ -115,8 +108,7 @@ const Navbar = () => {
               adminPages.map((page) => (
                 <Button
                   key={page.name}
-                  component={Link}
-                  to={page.path}
+                  onClick={() => navigate(page.path)}
                   sx={{ color: "white" }}
                 >
                   {page.name}
@@ -124,23 +116,23 @@ const Navbar = () => {
               ))}
           </Box>
 
-          {/* Auth Section */}
-          <Box sx={{ flexGrow: 0 }}>
+          {/* USER MENU */}
+          <Box>
             {!user ? (
               <>
-                <Button color="inherit" component={Link} to="/login">
+                <Button color="inherit" onClick={() => navigate("/login")}>
                   Login
                 </Button>
-                <Button color="inherit" component={Link} to="/register">
+                <Button color="inherit" onClick={() => navigate("/register")}>
                   Register
                 </Button>
               </>
             ) : (
               <>
-                <Tooltip title="Account settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar sx={{ bgcolor: "secondary.main" }}>
-                      {user?.name?.charAt(0).toUpperCase()}
+                <Tooltip title="Account">
+                  <IconButton onClick={(e) => setAnchorElUser(e.currentTarget)}>
+                    <Avatar>
+                      {user?.name?.[0]?.toUpperCase() || "U"}
                     </Avatar>
                   </IconButton>
                 </Tooltip>
@@ -148,12 +140,11 @@ const Navbar = () => {
                 <Menu
                   anchorEl={anchorElUser}
                   open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
+                  onClose={() => setAnchorElUser(null)}
                 >
                   <MenuItem onClick={() => navigate("/profile")}>
                     Profile
                   </MenuItem>
-
                   <MenuItem onClick={handleLogout}>
                     Logout
                   </MenuItem>
