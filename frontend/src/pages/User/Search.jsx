@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "../services/api";
-import MovieCard from "../components/common/MovieCard";
+import axios from "../../services/api";
+import MovieCard from "../../components/common/MovieCard";
 import { TextField, Button, Box, Typography } from "@mui/material";
 
 const Search = () => {

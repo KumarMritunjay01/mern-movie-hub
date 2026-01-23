@@ -8,7 +8,7 @@ import {
   Divider,
   Button,
 } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
@@ -22,7 +22,7 @@ const Profile = () => {
         <Button
           variant="contained"
           sx={{ mt: 2 }}
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/")}
         >
           Login
         </Button>
