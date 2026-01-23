@@ -41,10 +41,17 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user)
+    if (!user) {
+      console.log("User not found");
       return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    console.log("Entered password:", password);
+    console.log("Stored hash:", user.password);
 
     const isMatch = await user.comparePassword(password);
+    console.log("Password match:", isMatch);
+
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
