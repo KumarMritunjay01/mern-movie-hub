@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
-import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -19,28 +19,60 @@ const Register = () => {
         password,
       });
 
-      alert("Registration successful!");
-      navigate("/login");
+      alert("🎉 Registration Successful!");
+      navigate("/user/login");
     } catch (error) {
       alert(error.response?.data?.message || "Registration failed");
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box sx={{ mt: 8 }}>
-        <Typography variant="h4" align="center">
-          Register
+    <Container
+      maxWidth="sm"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          p: 4,
+          borderRadius: 4,
+          background: "rgba(20,20,20,0.9)",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
+          color: "#fff",
+          animation: "fadeIn 0.8s ease-in-out",
+        }}
+      >
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontWeight: "bold", letterSpacing: 1 }}
+        >
+          🎬 Create Account
+        </Typography>
+
+        <Typography
+          variant="body2"
+          align="center"
+          sx={{ color: "#aaa", mb: 3 }}
+        >
+          Join us and explore movies
         </Typography>
 
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
-            label="Name"
+            label="Full Name"
             margin="normal"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            sx={inputStyle}
           />
 
           <TextField
@@ -50,6 +82,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            sx={inputStyle}
           />
 
           <TextField
@@ -60,20 +93,66 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            sx={inputStyle}
           />
 
           <Button
             type="submit"
-            variant="contained"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 3,
+              py: 1.3,
+              background: "linear-gradient(135deg, #ff416c, #ff4b2b)",
+              color: "#fff",
+              fontWeight: "bold",
+              borderRadius: "30px",
+              transition: "0.3s",
+              "&:hover": {
+                transform: "scale(1.05)",
+                boxShadow: "0 10px 25px rgba(255,75,43,0.6)",
+              },
+            }}
           >
             Register
           </Button>
         </form>
+
+        <Typography align="center" mt={3}>
+          Already have an account?{" "}
+          <Link to="/user/login" style={{ color: "#ff4b2b" }}>
+            Login
+          </Link>
+        </Typography>
       </Box>
+
+      {/* Animation */}
+      <style>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}
+      </style>
     </Container>
   );
+};
+
+const inputStyle = {
+  input: { color: "#fff" },
+  label: { color: "#aaa" },
+  "& label.Mui-focused": { color: "#ff4b2b" },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": { borderColor: "#444" },
+    "&:hover fieldset": { borderColor: "#ff4b2b" },
+    "&.Mui-focused fieldset": { borderColor: "#ff4b2b" },
+  },
 };
 
 export default Register;

@@ -9,10 +9,10 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <ThemeProvider theme={theme}>
+    {/* <ThemeProvider theme={theme}> */}
       <AuthProvider>
         <App />
       </AuthProvider>
-    </ThemeProvider>
+    {/* </ThemeProvider> */}
   </BrowserRouter>
 );

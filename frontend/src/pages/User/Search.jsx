@@ -1,59 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import axios from "../../services/api";
 import MovieCard from "../../components/common/MovieCard";
-import { TextField, Button, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const Search = () => {
-  const [query, setQuery] = useState("");
+  const [params] = useSearchParams();
+  const query = params.get("query");
+
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
-    if (!query.trim()) return;
+  useEffect(() => {
+    if (query) fetchMovies();
+  }, [query]);
 
+  const fetchMovies = async () => {
     try {
       setLoading(true);
       const res = await axios.get(`/movies/search?q=${query}`);
       setMovies(res.data);
-    } catch (error) {
-      console.error("Search failed", error);
+    } catch (err) {
+      console.error("Search error:", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box p={3}>
-      <Typography variant="h4" mb={2}>
-        🔍 Search Movies
+    <Box p={3} sx={{ color: "#fff" }}>
+      <Typography variant="h5" mb={3}>
+        🔍 Results for: <span style={{ color: "#facc15" }}>{query}</span>
       </Typography>
-
-      <Box display="flex" gap={2} mb={3}>
-        <TextField
-          fullWidth
-          label="Search movie..."
-          variant="outlined"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          InputProps={{
-            style: {
-              color: "#000", // 👈 text color
-            },
-          }}
-          InputLabelProps={{
-            style: {
-              color: "#555",
-            },
-          }}
-        />
-        <Button
-          variant="contained"
-          onClick={handleSearch}
-          disabled={loading}
-        >
-          Search
-        </Button>
-      </Box>
 
       {loading && <Typography>Loading...</Typography>}
 
@@ -61,7 +39,11 @@ const Search = () => {
         <Typography>No movies found</Typography>
       )}
 
-      <Box display="flex" flexWrap="wrap" gap={2}>
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(auto-fill, minmax(200px, 1fr))"
+        gap={3}
+      >
         {movies.map((movie) => (
           <MovieCard key={movie._id} movie={movie} />
         ))}
