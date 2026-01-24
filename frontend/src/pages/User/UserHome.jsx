@@ -1,30 +1,26 @@
 import { useEffect, useState } from "react";
 import {
   Container,
-  Grid,
   Typography,
   Pagination,
   Box,
 } from "@mui/material";
 import API from "../../services/api";
 import MovieCard from "../../components/common/MovieCard";
+import { motion } from "framer-motion";
 
 const UserHome = () => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
 
   const fetchMovies = async () => {
     try {
-      setLoading(true);
-      const res = await API.get(`/movies?page=${page}&limit=9`);
+      const res = await API.get(`/movies?page=${page}&limit=8`);
       setMovies(res.data.movies);
       setTotalPages(res.data.totalPages);
     } catch (error) {
       console.error("Error fetching movies:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -34,95 +30,86 @@ const UserHome = () => {
   }, [page]);
 
   return (
-     <div className="page-animation bg-glow">
-      <Box
+    <Box
       sx={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(-45deg, #020617, #0f172a, #020617, #1e293b)",
-        backgroundSize: "400% 400%",
-        animation: "gradientBG 15s ease infinite",
-        position: "relative",
-        overflow: "hidden",
+        background: "radial-gradient(circle at top, #1c1c1c, #000)",
+        py: 5,
+        px: { xs: 2, md: 4 },
       }}
     >
-      {/* Floating Glow Effect */}
-      <Box className="bg-animation" />
-
-      <Container sx={{ mt: 5, mb: 6, position: "relative", zIndex: 1 }}>
-        {/* Title */}
+      {/* HEADER */}
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <Typography
           variant="h4"
-          align="center"
+          textAlign="center"
           sx={{
             mb: 4,
+            color: "#ff9800",
             fontWeight: "bold",
-            color: "#facc15",
+            letterSpacing: "1px",
           }}
         >
           🎬 Explore Movies
         </Typography>
+      </motion.div>
 
-        {/* Movie Grid */}
-        <Grid container spacing={3}>
-          {movies.map((movie) => (
-            <Grid
-              item
-              key={movie._id}
-              xs={12}
-              sm={6}
-              md={4}
-              display="flex"
-              justifyContent="center"
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  transition: "0.3s",
-                  opacity: loading ? 0.6 : 1,
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              >
-                <MovieCard movie={movie} />
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* Pagination */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mt: 5,
-          }}
-        >
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(e, value) => setPage(value)}
-            size="large"
-            disabled={loading}
-            sx={{
-              "& .MuiPaginationItem-root": {
-                color: "#fff",
-                transition: "0.3s",
-              },
-              "& .Mui-selected": {
-                backgroundColor: "#facc15 !important",
-                color: "#1111",
-                fontWeight: "bold",
-                transform: "scale(1.15)",
-              },
-            }}
-          />
-        </Box>
-      </Container>
+      {/* MOVIE GRID */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          },
+          gap: 3,
+        }}
+      >
+        {movies.map((movie, index) => (
+          <motion.div
+            key={movie._id}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: index * 0.07 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            <MovieCard movie={movie} />
+          </motion.div>
+        ))}
       </Box>
-     </div>
-    
+
+      {/* PAGINATION */}
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+        <Pagination
+          count={totalPages}
+          page={page}
+          onChange={(e, val) => setPage(val)}
+          size="large"
+          sx={{
+            "& .MuiPaginationItem-root": {
+              color: "#fff",
+              border: "1px solid #ff9800",
+              borderRadius: "10px",
+              transition: "0.3s",
+            },
+            "& .Mui-selected": {
+              backgroundColor: "#ff9800 !important",
+              color: "#000",
+              fontWeight: "bold",
+            },
+            "& .MuiPaginationItem-root:hover": {
+              backgroundColor: "rgba(255,152,0,0.2)",
+            },
+          }}
+        />
+      </Box>
+    </Box>
   );
 };
 

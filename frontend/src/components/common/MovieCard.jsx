@@ -7,11 +7,15 @@ const MovieCard = ({ movie, onDelete }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Convert minutes → hours
+  const formatDuration = (minutes) => {
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+  };
+
   return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      transition={{ duration: 0.3 }}
-    >
+    <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
       <Card
         sx={{
           borderRadius: "18px",
@@ -21,13 +25,15 @@ const MovieCard = ({ movie, onDelete }) => {
           backdropFilter: "blur(10px)",
           boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
           color: "#fff",
-          position: "relative",
         }}
       >
         {/* Poster */}
         <Box sx={{ position: "relative" }}>
           <img
-            src={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
+            src={
+              movie.poster ||
+              "https://via.placeholder.com/300x450?text=No+Image"
+            }
             alt={movie.title}
             style={{
               width: "100%",
@@ -36,7 +42,7 @@ const MovieCard = ({ movie, onDelete }) => {
             }}
           />
 
-          {/* Gradient Overlay */}
+          {/* Gradient */}
           <Box
             sx={{
               position: "absolute",
@@ -51,73 +57,110 @@ const MovieCard = ({ movie, onDelete }) => {
 
         {/* Content */}
         <CardContent>
-          <Typography
+          {/* Title */}
+         <Typography
             variant="h6"
-            sx={{ fontWeight: "bold", color: "#ff9800" }}
+            sx={{
+              fontWeight: "bold",
+              color: "#ff9800",
+              textAlign: "center",
+              mb: 0.5,
+
+              /* 👇 important part */
+              display: "-webkit-box",
+              WebkitLineClamp: 1,     // show only 1 line
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "normal",
+            }}
           >
             {movie.title}
           </Typography>
 
-          <Typography
-            sx={{ fontSize: "14px", color: "#ccc", mt: 0.5 }}
+
+          {/* Rating & Duration */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mt: 0.5,
+              fontSize: "14px",
+              color: "#ccc",
+              pt:2,
+            }}
           >
-            ⭐ {movie.rating} • {new Date(movie.releaseDate).getFullYear()}
-          </Typography>
+            <span style={{ color: "#facc15" }}>
+              ⭐ {movie.rating}
+            </span>
+
+            <span style={{ color: "#60a5fa" }}>
+              ⏱ {formatDuration(movie.duration)}
+            </span>
+          </Box>
 
           {/* Admin Buttons */}
-          {/* Admin Buttons */}
-{user?.role === "admin" && (
-  <Box
-    sx={{
-      display: "flex",
-      gap: 1,
-      mt: 2,
-    }}
-  >
-    {/* EDIT */}
-    <Button
-      size="small"
-      onClick={() => navigate(`/admin/edit/${movie._id}`)}
-      sx={{
-        flex: 1,
-        background: "linear-gradient(135deg, #ffb74d, #ff9800)",
-        color: "#1a1a1a",
-        fontWeight: "bold",
-        borderRadius: "20px",
-        transition: "0.3s",
-        "&:hover": {
-          background: "linear-gradient(135deg, #ffa726, #fb8c00)",
-          boxShadow: "0 6px 16px rgba(255,167,38,0.5)",
-          transform: "scale(1.05)",
-        },
-      }}
-    >
-      Edit
-    </Button>
+          {user?.role === "admin" && (
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                mt: 2,
+              }}
+            >
+              {/* Edit */}
+              <Button
+                size="small"
+                onClick={() =>
+                  navigate(`/admin/edit/${movie._id}`)
+                }
+                sx={{
+                  flex: 1,
+                  background:
+                    "linear-gradient(135deg, #ffb74d, #ff9800)",
+                  color: "#1a1a1a",
+                  fontWeight: "bold",
+                  borderRadius: "20px",
+                  transition: "0.3s",
+                  "&:hover": {
+                    background:
+                      "linear-gradient(135deg, #ffa726, #fb8c00)",
+                    boxShadow:
+                      "0 6px 16px rgba(255,167,38,0.5)",
+                    transform: "scale(1.05)",
+                    pt:2,
+                  },
+                }}
+              >
+                Edit
+              </Button>
 
-    {/* DELETE */}
-    <Button
-      size="small"
-      onClick={() => onDelete(movie._id)}
-      sx={{
-        flex: 1,
-        background: "linear-gradient(135deg, #ef5350, #e53935)",
-        color: "#fff",
-        fontWeight: "bold",
-        borderRadius: "20px",
-        transition: "0.3s",
-        "&:hover": {
-          background: "linear-gradient(135deg, #e53935, #c62828)",
-          boxShadow: "0 6px 16px rgba(239,83,80,0.5)",
-          transform: "scale(1.05)",
-        },
-      }}
-    >
-      Delete
-    </Button>
-  </Box>
-)}
-
+              {/* Delete */}
+              <Button
+                size="small"
+                onClick={() => onDelete(movie._id)}
+                sx={{
+                  flex: 1,
+                  background:
+                    "linear-gradient(135deg, #ef5350, #e53935)",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  borderRadius: "20px",
+                  transition: "0.3s",
+                  "&:hover": {
+                    background:
+                      "linear-gradient(135deg, #e53935, #c62828)",
+                    boxShadow:
+                      "0 6px 16px rgba(239,83,80,0.5)",
+                    transform: "scale(1.05)",
+                  },
+                }}
+              >
+                Delete
+              </Button>
+            </Box>
+          )}
         </CardContent>
       </Card>
     </motion.div>
