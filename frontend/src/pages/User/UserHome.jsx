@@ -16,7 +16,7 @@ const UserHome = () => {
 
   const fetchMovies = async () => {
     try {
-      const res = await API.get(`/movies?page=${page}&limit=8`);
+      const res = await API.get(`/api/movies?page=${page}&limit=8`)
       setMovies(res.data.movies);
       setTotalPages(res.data.totalPages);
     } catch (error) {

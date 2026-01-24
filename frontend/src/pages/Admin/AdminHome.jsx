@@ -14,7 +14,7 @@ const AdminHome = () => {
 
   const fetchMovies = async (pageNumber = 1) => {
     try {
-      const res = await API.get(`/movies?page=${pageNumber}&limit=8`);
+      const res = await API.get(`/api/movies?page=${pageNumber}&limit=8`);
       setMovies(res.data.movies);
       setTotalPages(res.data.totalPages);
     } catch (err) {
@@ -28,7 +28,7 @@ const AdminHome = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this movie?")) return;
-    await API.delete(`/movies/${id}`);
+    await API.delete(`/api/movies/${id}`);
     fetchMovies(page);
   };
 

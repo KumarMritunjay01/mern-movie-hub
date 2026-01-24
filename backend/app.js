@@ -1,25 +1,34 @@
-import express from 'express'
-import dotenv from 'dotenv'
+import express from "express";
+import dotenv from "dotenv";
 import cors from "cors";
-import movieRoutes from './routes/movie.routes.js'
+import movieRoutes from "./routes/movie.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
-dotenv.config()
+dotenv.config();
 
 const app = express();
 
+// ✅ THIS IS THE IMPORTANT PART
+const allowedOrigins = process.env.CLIENT_URLS.split(",");
+
 app.use(
   cors({
-    origin:"https://mern-movie-hub.vercel.app",
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
-
-// Routes
+// ✅ ROUTES (DO NOT CHANGE)
 app.use("/api/auth", authRoutes);
 app.use("/api/movies", movieRoutes);
 

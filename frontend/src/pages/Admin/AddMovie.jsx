@@ -30,7 +30,7 @@ const AddMovie = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/movies", movie);
+      await API.post("/api/movies", movie);
       alert("🎉 Movie added successfully!");
       navigate("/");
     } catch {
