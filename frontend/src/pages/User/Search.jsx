@@ -19,7 +19,7 @@ const Search = () => {
   const fetchMovies = async () => {
     try {
       setLoading(true);
-      const res = await API.get(`/movies/search?q=${query}`);
+      const res = await API.get(`/api/movies/search?q=${query}`);
       setMovies(res.data);
     } catch (err) {
       console.error("Search error:", err);

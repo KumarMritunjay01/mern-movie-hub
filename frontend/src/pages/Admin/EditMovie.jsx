@@ -14,7 +14,7 @@ const EditMovie = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await API.get(`/movies/${id}`);
+        const res = await API.get(`/api/movies/${id}`);
         setMovie(res.data);
       } catch {
         alert("Movie not found");
@@ -32,7 +32,7 @@ const EditMovie = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await API.put(`/movies/${id}`, movie);
+    await API.put(`/api/movies/${id}`, movie);
     alert("🎉 Movie updated successfully");
     navigate("/admin");
   };

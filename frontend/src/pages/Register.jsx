@@ -13,7 +13,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await API.post("/auth/register", { name, email, password });
+      await API.post("/api/auth/register", { name, email, password });
       alert("🎉 Registration Successful!");
       navigate("/user/login");
     } catch (error) {

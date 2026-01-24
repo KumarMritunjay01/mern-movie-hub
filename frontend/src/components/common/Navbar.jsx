@@ -162,7 +162,7 @@ const Navbar = () => {
                   setAnchorEl(null);
                 }}
               >
-                🎬 Manage Movies
+                Manage Movies
               </MenuItem>
             )}
 
