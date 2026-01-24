@@ -5,10 +5,10 @@ import {
   Container,
   Typography,
   Box,
-  Divider,
 } from "@mui/material";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +21,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const user = await login(email, password);
 
@@ -36,56 +35,130 @@ const Login = () => {
       }
 
       navigate(user.role === "admin" ? "/admin" : "/user");
-    } catch (error) {
-      alert("Invalid credentials");
+    } catch {
+      alert("❌ Invalid credentials");
     }
   };
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{ minHeight: "100vh", display: "flex", alignItems: "center" }}
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background: "radial-gradient(circle at top, #1c1c1c, #000)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
-      <Box sx={{ p: 4, width: "100%", background: "#141414", borderRadius: 4 }}>
+      <Container maxWidth="sm">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <Box
+            sx={{
+              p: 4,
+              borderRadius: "20px",
+              background:
+                "linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))",
+              backdropFilter: "blur(10px)",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.7)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              align="center"
+              mb={3}
+              sx={{
+                color: "#ff9800",
+                fontWeight: "bold",
+                letterSpacing: "1px",
+              }}
+            >
+              🎬 {isAdminLogin ? "Admin Login" : "User Login"}
+            </Typography>
 
-        <Typography variant="h4" align="center" color="#fff">
-          🎬 {isAdminLogin ? "Admin Login" : "User Login"}
-        </Typography>
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Email"
+                margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                InputLabelProps={{ style: { color: "#ccc" } }}
+                InputProps={{
+                  style: {
+                    color: "#fff",
+                    backgroundColor: "rgba(255,255,255,0.05)",
+                    borderRadius: "10px",
+                  },
+                }}
+                required
+              />
 
-        <form onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Email"
-            margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                InputLabelProps={{ style: { color: "#ccc" } }}
+                InputProps={{
+                  style: {
+                    color: "#fff",
+                    backgroundColor: "rgba(255,255,255,0.05)",
+                    borderRadius: "10px",
+                  },
+                }}
+                required
+              />
 
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+              <Button
+                type="submit"
+                fullWidth
+                sx={{
+                  mt: 3,
+                  py: 1.5,
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  background:
+                    "linear-gradient(135deg, #ff9800, #ff5722)",
+                  color: "#000",
+                  borderRadius: "30px",
+                  transition: "0.3s",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow:
+                      "0 10px 25px rgba(255,152,0,0.6)",
+                  },
+                }}
+              >
+                Login
+              </Button>
+            </form>
 
-          <Button fullWidth type="submit" sx={{ mt: 3 }}>
-            Login
-          </Button>
-        </form>
-
-        {/* 👇 REGISTER ONLY FOR USER */}
-        {!isAdminLogin && (
-          <Typography align="center" mt={2}>
-            Don’t have an account?{" "}
-            <Link to="/register">Register</Link>
-          </Typography>
-        )}
-      </Box>
-    </Container>
+            {!isAdminLogin && (
+              <Typography align="center" mt={3} color="#ccc">
+                Don’t have an account?{" "}
+                <Link
+                  to="/register"
+                  style={{
+                    color: "#ff9800",
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Register
+                </Link>
+              </Typography>
+            )}
+          </Box>
+        </motion.div>
+      </Container>
+    </Box>
   );
 };
 
