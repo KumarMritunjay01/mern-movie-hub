@@ -10,7 +10,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://mern-movie-hub.vercel.app",
+    origin:"https://mern-movie-hub.vercel.app",
     credentials: true,
   })
 );
