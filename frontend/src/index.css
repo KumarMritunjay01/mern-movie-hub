@@ -1,5 +1,209 @@
-*{
+/* ================================
+   GLOBAL RESET
+================================ */
+* {
     margin: 0;
     padding: 0;
-    color: black;
+    box-sizing: border-box;
+}
+
+/* ================================
+   BODY STYLE
+================================ */
+body {
+    font-family: "Inter", system-ui, sans-serif;
+    background-color: #f3f4f6;
+    color: #111827;
+    overflow-x: hidden;
+}
+
+/* ================================
+   SMOOTH SCROLL
+================================ */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ================================
+   SCROLLBAR (MODERN)
+================================ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e5e7eb;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+/* ================================
+   PAGE FADE ANIMATION
+================================ */
+.page-animation {
+    animation: fadeInUp 0.6s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   MOVIE CARD ANIMATION
+================================ */
+.movie-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.35s ease;
+    cursor: pointer;
+    background: #0f172a;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.movie-card:hover {
+    transform: scale(1.06);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+}
+
+/* Poster zoom */
+.movie-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.movie-card:hover img {
+    transform: scale(1.12);
+}
+
+/* ================================
+   MOVIE OVERLAY (HOVER)
+================================ */
+.movie-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.3));
+    opacity: 0;
+    transition: 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.movie-card:hover .movie-overlay {
+    opacity: 1;
+}
+
+/* Play icon animation */
+.play-icon {
+    font-size: 60px;
+    color: #facc15;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ================================
+   MOVIE TITLE
+================================ */
+.movie-title {
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* ================================
+   BACKGROUND GLOW EFFECT
+================================ */
+.bg-glow::before,
+.bg-glow::after {
+    content: "";
+    position: fixed;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(250, 204, 21, 0.25), transparent);
+    border-radius: 50%;
+    animation: float 12s infinite ease-in-out;
+    z-index: -1;
+}
+
+.bg-glow::after {
+    left: 70%;
+    top: 40%;
+    animation-delay: 6s;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-80px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   PAGINATION ANIMATION
+================================ */
+.MuiPaginationItem-root {
+    transition: all 0.3s ease;
+}
+
+.MuiPaginationItem-root:hover {
+    transform: scale(1.1);
+}
+
+.Mui-selected {
+    background-color: #facc15 !important;
+    color: black !important;
+    font-weight: bold;
+}
+
+/* ================================
+   BUTTON EFFECT
+================================ */
+button {
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
 }

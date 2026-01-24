@@ -7,7 +7,7 @@ const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ width: 350, borderRadius:5}}>
+      <Card sx={{ width: 350, borderRadius:5}} className="movie-card">
       {/* ✅ Movie Poster */}
       <img
         src={movie.poster || "https://via.placeholder.com/300x450?text=No+Image"}
@@ -39,7 +39,7 @@ const MovieCard = ({ movie }) => {
           </Button>
         )}
       </CardContent>
-    </Card>
+      </Card>
   );
 };
 
