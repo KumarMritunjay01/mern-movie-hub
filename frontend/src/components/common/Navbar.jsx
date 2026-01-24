@@ -40,18 +40,48 @@ const Navbar = () => {
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
 
-        {/* LOGO */}
-        <Typography
-          variant="h6"
+        {/* LOGO + HOME */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <Typography
+            variant="h6"
+            onClick={() => navigate(isAdmin ? "/admin" : "/user")}
+            sx={{
+              fontWeight: "bold",
+              cursor: "pointer",
+              color: "#facc15",
+            }}
+          >
+            MovieFlix
+          </Typography>
+
+          {/* HOME BUTTON */}
+          <Typography
           onClick={() => navigate(isAdmin ? "/admin" : "/user")}
           sx={{
-            fontWeight: "bold",
             cursor: "pointer",
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "15px",
+            fontWeight: 600,
             color: "#facc15",
+            px: 2.5,
+            py: 0.8,
+            borderRadius: "999px",
+            transition: "all 0.3s ease",
+            background: "rgba(250, 204, 21, 0.08)",
+            border: "1px solid rgba(250, 204, 21, 0.3)",
+
+            "&:hover": {
+              background: "linear-gradient(135deg, #facc15, #f59e0b)",
+              color: "#000",
+              boxShadow: "0 4px 15px rgba(250, 204, 21, 0.6)",
+              transform: "translateY(-1px)",
+            },
           }}
         >
-          🎬 MovieFlix
+          Home
         </Typography>
+
+        </Box>
 
         {/* SEARCH (ONLY USER) */}
         {!isAdmin && (
