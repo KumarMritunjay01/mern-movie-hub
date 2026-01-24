@@ -125,7 +125,7 @@ const Home = () => {
             <Button
               fullWidth
               component={Link}
-              to="/adim/login"
+              to="/admin/login"
               sx={{
                 background: "#374151",
                 color: "#fff",

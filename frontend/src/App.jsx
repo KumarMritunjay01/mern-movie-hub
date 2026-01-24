@@ -11,6 +11,7 @@ import Navbar from "./components/common/Navbar";
 import { useAuth } from "./context/AuthContext";
 import UserHome from "./pages/User/UserHome";
 import NotFound from "./pages/NotFound";
+import AdminHome from "./pages/Admin/AdminHome";
 
 function App() {
   const { user } = useAuth();
@@ -33,6 +34,7 @@ function App() {
 
         {/* AUTH ROUTES */}
         <Route path="/user/login" element={<Login />} />
+        <Route path="/admin/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         {/* USER ROUTES */}
@@ -65,6 +67,15 @@ function App() {
 
         {/* ADMIN ROUTES */}
         <Route
+          path="/admin"
+          element={
+            <ProtectedRoute adminOnly={true}>
+              <AdminHome />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/admin/add"
           element={
             <ProtectedRoute adminOnly={true}>
@@ -72,7 +83,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        
         <Route
           path="/admin/edit/:id"
           element={

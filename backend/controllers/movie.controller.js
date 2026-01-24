@@ -22,22 +22,33 @@ export const addMovie = async (req, res) => {
 ============================ */
 export const getAllMovies = async (req, res) => {
   try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
+    const isAdmin = req.user?.role === "admin";
 
-    const skip = (page - 1) * limit;
+    let movies;
+    let total;
 
-    const movies = await Movie.find()
-      .skip(skip)
-      .limit(limit)
-      .sort({ createdAt: -1 });
+    if (isAdmin) {
+      // ✅ Admin ko saari movies
+      movies = await Movie.find().sort({ createdAt: -1 });
+      total = movies.length;
+    } else {
+      // ✅ User ke liye pagination
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 10;
+      const skip = (page - 1) * limit;
 
-    const total = await Movie.countDocuments();
+      movies = await Movie.find()
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+
+      total = await Movie.countDocuments();
+    }
 
     res.status(200).json({
       movies,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
+      totalPages: Math.ceil(total / 10),
+      currentPage: req.query.page || 1,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -79,6 +90,23 @@ export const sortMovies = async (req, res) => {
     });
 
     res.status(200).json(movies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/* ============================
+   ✅ GET SINGLE MOVIE BY ID
+============================ */
+export const getMovieById = async (req, res) => {
+  try {
+    const movie = await Movie.findById(req.params.id);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.status(200).json(movie);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

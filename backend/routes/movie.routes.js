@@ -6,6 +6,7 @@ import {
   sortMovies,
   updateMovie,
   deleteMovie,
+  getMovieById,
 } from "../controllers/movie.controller.js";
 
 import { protect } from "../middleware/auth.middleware.js";
@@ -22,5 +23,8 @@ router.get("/sorted", sortMovies);
 router.post("/", protect, adminOnly, addMovie);
 router.put("/:id", protect, adminOnly, updateMovie);
 router.delete("/:id", protect, adminOnly, deleteMovie);
+
+// ✅ GET MOVIE BY ID (FOR EDIT PAGE)
+router.get("/:id", getMovieById);
 
 export default router;
