@@ -111,7 +111,7 @@ const MovieCard = ({ movie, onDelete }) => {
         </Box>
 
         {/* Admin Buttons */}
-        {user?.role === "admin" && (
+        {user?.role === "admin" && onDelete && (
           <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
             <Button
               size="small"
@@ -154,6 +154,7 @@ const MovieCard = ({ movie, onDelete }) => {
             </Button>
           </Box>
         )}
+
       </CardContent>
 
       </Card>

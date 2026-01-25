@@ -32,9 +32,21 @@ const EditMovie = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await API.put(`/api/movies/${id}`, movie);
-    alert("🎉 Movie updated successfully");
-    navigate("/admin");
+
+    const { title, rating, releaseDate, description, genre, duration } = movie;
+
+    if (!title || !rating || !releaseDate || !description || !genre || !duration) {
+      alert("⚠️ Please fill all required fields");
+      return;
+    }
+
+    try {
+      await API.put(`/api/movies/${id}`, movie);
+      alert("🎉 Movie updated successfully");
+      navigate("/admin");
+    } catch (error) {
+      alert("❌ Failed to update movie");
+    }
   };
 
   if (loading) return <p style={{ color: "#fff" }}>Loading...</p>;
@@ -91,6 +103,7 @@ const EditMovie = () => {
                 name="title"
                 value={movie.title}
                 onChange={handleChange}
+                required
                 fullWidth
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 InputProps={{
@@ -105,9 +118,16 @@ const EditMovie = () => {
               <TextField
                 label="Rating"
                 name="rating"
+                type="number"
                 value={movie.rating}
                 onChange={handleChange}
+                required
                 fullWidth
+                inputProps={{
+                  min: 1,
+                  max: 10,
+                  step: 0.1,
+                }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 InputProps={{
                   style: {
@@ -124,6 +144,7 @@ const EditMovie = () => {
                 type="date"
                 value={movie.releaseDate?.split("T")[0]}
                 onChange={handleChange}
+                required
                 fullWidth
                 InputLabelProps={{ shrink: true, style: { color: "#ccc" } }}
                 InputProps={{
