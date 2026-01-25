@@ -6,9 +6,10 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { mixNumber, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import API from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../components/common/Loader";
 
 const AddMovie = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const AddMovie = () => {
     genre: "",
     poster: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setMovie({ ...movie, [e.target.name]: e.target.value });
@@ -38,13 +41,19 @@ const AddMovie = () => {
     }
 
     try {
+      setLoading(true);
       await API.post("/api/movies", movie);
       alert("🎉 Movie added successfully!");
       navigate("/");
     } catch {
       alert("❌ Failed to add movie");
+    } finally {
+      setLoading(false);
     }
   };
+
+  // ✅ Loader
+  if (loading) return <Loader />;
 
   return (
     <Box
@@ -78,7 +87,6 @@ const AddMovie = () => {
               sx={{
                 fontWeight: "bold",
                 color: "#ff9800",
-                letterSpacing: "1px",
               }}
             >
               🎬 Add New Movie
@@ -94,33 +102,49 @@ const AddMovie = () => {
               }}
             >
               {[
-                { label: "Title", name: "title",required: true },
-                { label: "Genre", name: "genre",required: true },
-                { label: "Rating", name: "rating", type: "number",required: true ,inputProps: {min: 1,max: 10,step: 0.1}},
-                { label: "Release Year", name: "releaseDate", type: "number",required: true ,
-                  inputProps: {min: 1800,}},
-                { label: "Duration (min)", name: "duration", type: "number",required: true ,inputProps: {min: 30,}},
-                { label: "Poster URL", name: "poster" ,required: false},
+                { label: "Title", name: "title", required: true },
+                { label: "Genre", name: "genre", required: true },
+                {
+                  label: "Rating",
+                  name: "rating",
+                  type: "number",
+                  required: true,
+                  inputProps: { min: 1, max: 10, step: 0.1 },
+                },
+                {
+                  label: "Release Year",
+                  name: "releaseDate",
+                  type: "number",
+                  required: true,
+                  inputProps: { min: 1800 },
+                },
+                {
+                  label: "Duration (min)",
+                  name: "duration",
+                  type: "number",
+                  required: true,
+                  inputProps: { min: 30 },
+                },
+                { label: "Poster URL", name: "poster" },
               ].map((field) => (
                 <TextField
-              key={field.name}
-              label={field.label}
-              name={field.name}
-              type={field.type || "text"}
-              onChange={handleChange}
-              required={field.required}
-              fullWidth
-              inputProps={field.inputProps}
-              InputLabelProps={{ style: { color: "#ccc" } }}
-              InputProps={{
-                style: {
-                  color: "#fff",
-                  backgroundColor: "rgba(255,255,255,0.05)",
-                  borderRadius: "10px",
-                },
-              }}
-            />
-
+                  key={field.name}
+                  label={field.label}
+                  name={field.name}
+                  type={field.type || "text"}
+                  required={field.required}
+                  inputProps={field.inputProps}
+                  onChange={handleChange}
+                  fullWidth
+                  InputLabelProps={{ style: { color: "#ccc" } }}
+                  InputProps={{
+                    style: {
+                      color: "#fff",
+                      backgroundColor: "rgba(255,255,255,0.05)",
+                      borderRadius: "10px",
+                    },
+                  }}
+                />
               ))}
 
               <TextField
@@ -143,13 +167,7 @@ const AddMovie = () => {
               />
 
               {movie.poster && (
-                <Box
-                  sx={{
-                    gridColumn: "1 / -1",
-                    textAlign: "center",
-                    mt: 2,
-                  }}
-                >
+                <Box sx={{ gridColumn: "1 / -1", textAlign: "center" }}>
                   <img
                     src={movie.poster}
                     alt="preview"
@@ -169,13 +187,11 @@ const AddMovie = () => {
                   gridColumn: "1 / -1",
                   mt: 3,
                   py: 1.5,
-                  fontSize: "16px",
                   fontWeight: "bold",
-                  color: "#000",
                   background:
                     "linear-gradient(135deg, #ff9800, #ff5722)",
+                  color: "#000",
                   borderRadius: "30px",
-                  transition: "0.3s",
                   "&:hover": {
                     transform: "scale(1.05)",
                     boxShadow: "0 10px 30px rgba(255,152,0,0.6)",

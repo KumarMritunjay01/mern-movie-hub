@@ -1,33 +1,35 @@
 import { useEffect, useState } from "react";
-import {
-  Container,
-  Typography,
-  Pagination,
-  Box,
-} from "@mui/material";
+import { Typography, Pagination, Box } from "@mui/material";
 import API from "../../services/api";
 import MovieCard from "../../components/common/MovieCard";
 import { motion } from "framer-motion";
+import Loader from "../../components/common/Loader";
 
 const UserHome = () => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  const fetchMovies = async () => {
-    try {
-      const res = await API.get(`/api/movies?page=${page}&limit=8`)
-      setMovies(res.data.movies);
-      setTotalPages(res.data.totalPages);
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    }
-  };
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        setLoading(true);
+        const res = await API.get(`/api/movies?page=${page}&limit=8`);
+        setMovies(res.data.movies);
+        setTotalPages(res.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchMovies();
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
+
+  // ✅ SHOW LOADER
+  if (loading) return <Loader />;
 
   return (
     <Box
@@ -51,7 +53,6 @@ const UserHome = () => {
             mb: 4,
             color: "#ff9800",
             fontWeight: "bold",
-            letterSpacing: "1px",
           }}
         >
           🎬 Explore Movies
@@ -96,15 +97,11 @@ const UserHome = () => {
               color: "#fff",
               border: "1px solid #ff9800",
               borderRadius: "10px",
-              transition: "0.3s",
             },
             "& .Mui-selected": {
               backgroundColor: "#ff9800 !important",
               color: "#000",
               fontWeight: "bold",
-            },
-            "& .MuiPaginationItem-root:hover": {
-              backgroundColor: "rgba(255,152,0,0.2)",
             },
           }}
         />

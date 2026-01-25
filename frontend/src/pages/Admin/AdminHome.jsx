@@ -4,21 +4,26 @@ import API from "../../services/api";
 import { Button, Box, Pagination, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import Loader from "../../components/common/Loader";
 
 const AdminHome = () => {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   const fetchMovies = async (pageNumber = 1) => {
     try {
+      setLoading(true);
       const res = await API.get(`/api/movies?page=${pageNumber}&limit=8`);
       setMovies(res.data.movies);
       setTotalPages(res.data.totalPages);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,6 +36,9 @@ const AdminHome = () => {
     await API.delete(`/api/movies/${id}`);
     fetchMovies(page);
   };
+
+  // ✅ Loader
+  if (loading) return <Loader />;
 
   return (
     <Box
@@ -68,7 +76,6 @@ const AdminHome = () => {
             sx={{
               color: "#ff9800",
               fontWeight: "bold",
-              letterSpacing: "1px",
             }}
           >
             🎬 Admin Dashboard
@@ -83,7 +90,6 @@ const AdminHome = () => {
               py: 1,
               borderRadius: "30px",
               fontWeight: "bold",
-              transition: "0.3s",
               "&:hover": {
                 transform: "scale(1.05)",
                 boxShadow: "0 10px 25px rgba(255,152,0,0.6)",

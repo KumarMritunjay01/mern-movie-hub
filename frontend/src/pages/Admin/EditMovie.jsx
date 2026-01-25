@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
 import { motion } from "framer-motion";
 import API from "../../services/api";
+import Loader from "../../components/common/Loader";
 
 const EditMovie = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const EditMovie = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
+        setLoading(true);
         const res = await API.get(`/api/movies/${id}`);
         setMovie(res.data);
       } catch {
@@ -23,6 +25,7 @@ const EditMovie = () => {
         setLoading(false);
       }
     };
+
     fetchMovie();
   }, [id, navigate]);
 
@@ -41,15 +44,19 @@ const EditMovie = () => {
     }
 
     try {
+      setLoading(true);
       await API.put(`/api/movies/${id}`, movie);
       alert("🎉 Movie updated successfully");
       navigate("/admin");
-    } catch (error) {
+    } catch {
       alert("❌ Failed to update movie");
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (loading) return <p style={{ color: "#fff" }}>Loading...</p>;
+  // ✅ LOADER
+  if (loading) return <Loader />;
 
   return (
     <Box
@@ -123,11 +130,7 @@ const EditMovie = () => {
                 onChange={handleChange}
                 required
                 fullWidth
-                inputProps={{
-                  min: 1,
-                  max: 10,
-                  step: 0.1,
-                }}
+                inputProps={{ min: 1, max: 10, step: 0.1 }}
                 InputLabelProps={{ style: { color: "#ccc" } }}
                 InputProps={{
                   style: {
