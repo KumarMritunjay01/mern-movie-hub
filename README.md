@@ -1,3 +1,8 @@
+
+// Please have a look with :- https://mern-movie-hub.vercel.app/
+// as a admin use :- email -> admin@movieverse.com
+                    password ->admin123
+                    
 # mern-movie-hub
 A full-stack MERN movie application that allows users to browse movies, view details, and manage content
 
